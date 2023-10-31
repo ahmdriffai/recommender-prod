@@ -128,25 +128,28 @@ app = Flask(__name__)
 product = get_product()
 product.rename(columns={'product_id': 'id'}, inplace=True)
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET','POST'])
 def predict():
-    email = request.json["email"]
-    print(f"email adalah : {email}")
-    # top_n = request.form["ton_n"]
-    rating = get_rating()
-    productsql = get_product()
-    user = get_user()
+    if request.method == 'POST':
+        email = request.json["email"]
+        print(f"email adalah : {email}")
+        # top_n = request.form["ton_n"]
+        rating = get_rating()
+        productsql = get_product()
+        user = get_user()
 
-    sm, ut, b = compute_recomender(productsql, rating, user)
-    predict = recommendation_to_user(email, 30 , sm, ut, b)
-    responses = []
-    for i in predict:
-        image = product.loc[product['id'] == i['id']]['image'].values[0]
-        name = product.loc[product['id'] == i['id']]['name'].values[0]
+        sm, ut, b = compute_recomender(productsql, rating, user)
+        predict = recommendation_to_user(email, 30 , sm, ut, b)
+        responses = []
+        for i in predict:
+            image = product.loc[product['id'] == i['id']]['image'].values[0]
+            name = product.loc[product['id'] == i['id']]['name'].values[0]
 
-        responses.append({'id': i['id'], "name": name, "image": image})
+            responses.append({'id': i['id'], "name": name, "image": image})
 
-    return jsonify(responses)
+        return jsonify(responses)
+    else:
+        return 'predict recomender endpoind: body => [email:"text", top_n = "int"]'
 
 
 if __name__ == '__main__':
