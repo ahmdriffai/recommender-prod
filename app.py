@@ -4,13 +4,18 @@ import numpy as np
 from copy import deepcopy
 from scipy.spatial.distance import pdist, squareform
 import mysql.connector
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 def get_rating():
+
     con = mysql.connector.connect(
-        user='root',
-        password='',
-        host='localhost',
-        database='toko-online'
+        user= os.getenv('DB_USER'),
+        password= os.getenv('DB_PASSWORD'),
+        host= os.getenv('DB_HOST'),
+        database= os.getenv('DB_NAME')
     )
 
     cursor = con.cursor()
@@ -29,10 +34,10 @@ def get_rating():
 
 def get_product():
     con = mysql.connector.connect(
-        user='root',
-        password='',
-        host='localhost',
-        database='toko-online'
+        user= os.getenv('DB_USER'),
+        password= os.getenv('DB_PASSWORD'),
+        host= os.getenv('DB_HOST'),
+        database= os.getenv('DB_NAME')
     )
 
     cursor = con.cursor()
@@ -52,12 +57,12 @@ def get_product():
 
 def get_user():
     con = mysql.connector.connect(
-        user='root',
-        password='',
-        host='localhost',
-        database='toko-online'
+        user= os.getenv('DB_USER'),
+        password= os.getenv('DB_PASSWORD'),
+        host= os.getenv('DB_HOST'),
+        database= os.getenv('DB_NAME')
     )
-
+    
     cursor = con.cursor()
     query = 'SELECT id, email FROM users'
     cursor.execute(query)
